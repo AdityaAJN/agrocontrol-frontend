@@ -175,3 +175,20 @@ button:hover {
     border: 1px solid #ccc;
     font-size: 1rem;
 }
+.btn-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.btn-group button:first-child {
+    background: #ff9800;
+}
+
+.btn-group button:first-child:hover {
+    background: #fb8c00;
+}
+
+.cart-link {
+    font-weight: bold;
+}

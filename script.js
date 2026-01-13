@@ -48,7 +48,11 @@ function renderCrops(crops) {
 
             <p>${crop.description}</p>
 
-            <button onclick="buyCrop(${crop.id})">Buy</button>
+           <div class="btn-group">
+    <button onclick="addToCart(${crop.id})">Add to Cart</button>
+    <button onclick="buyCrop(${crop.id})">Buy</button>
+</div>
+
         `;
 
         container.appendChild(card);
@@ -151,3 +155,35 @@ function searchCrops() {
 
     renderCrops(filtered);
 }
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+function addToCart(cropId) {
+    const crop = allCrops.find(c => c.id === cropId);
+    const qty = parseInt(document.getElementById(`qty-${cropId}`).value) || 1;
+
+    const existing = cart.find(item => item.id === cropId);
+
+    if (existing) {
+        existing.quantity += qty;
+    } else {
+        cart.push({
+            id: crop.id,
+            name: crop.name,
+            price: crop.price,
+            quantity: qty
+        });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    updateCartCount();
+
+    alert(`${crop.name} added to cart`);
+}
+function updateCartCount() {
+    const countEl = document.getElementById("cart-count");
+    if (!countEl) return;
+
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    countEl.textContent = totalItems;
+}
+updateCartCount();
