@@ -210,19 +210,33 @@ function loadCartPage() {
         div.className = "cart-item";
 
         div.innerHTML = `
-            <h3>${item.name}</h3>
-            <p>Price: &#8377; ${item.price} / kg</p>
-            <p>Quantity: ${item.quantity} kg</p>
-            <p><strong>Total: &#8377; ${itemTotal}</strong></p>
-            <hr>
-        `;
+    <label>
+        <input 
+            type="checkbox" 
+            class="cart-checkbox" 
+            data-id="${item.id}" 
+            checked 
+            onchange="updateSelectedTotal()"
+        >
+        <strong>${item.name}</strong>
+    </label>
+
+    <p>Price: &#8377; ${item.price} / kg</p>
+    <p>Quantity: ${item.quantity} kg</p>
+    <p><strong>Total: &#8377; ${itemTotal}</strong></p>
+    <hr>
+`;
+
 
         cartContainer.appendChild(div);
     });
 
     totalEl.innerHTML = `Grand Total: &#8377; ${grandTotal}`;
 }
+
+
 document.addEventListener("DOMContentLoaded", loadCartPage);
+updateSelectedTotal();
 function buyFromCart() {
     const token = localStorage.getItem("token");
 
@@ -232,19 +246,42 @@ function buyFromCart() {
         return;
     }
 
-    if (cart.length === 0) {
-        alert("Your cart is empty");
+    const checkboxes = document.querySelectorAll(".cart-checkbox");
+    const selectedIds = [];
+
+    checkboxes.forEach(cb => {
+        if (cb.checked) {
+            selectedIds.push(parseInt(cb.dataset.id));
+        }
+    });
+
+    if (selectedIds.length === 0) {
+        alert("Please select at least one item");
         return;
     }
 
-    // Simple order placement (demo purpose)
-    alert("Order placed successfully!");
+    alert("Order placed for selected items!");
 
-    // Clear cart
-    cart = [];
-    localStorage.removeItem("cart");
+    // Remove only selected items
+    cart = cart.filter(item => !selectedIds.includes(item.id));
+    localStorage.setItem("cart", JSON.stringify(cart));
+
     updateCartCount();
+    loadCartPage();
+}
 
-    // Redirect to home
-    window.location.href = "index.html";
+function updateSelectedTotal() {
+    const checkboxes = document.querySelectorAll(".cart-checkbox");
+    let total = 0;
+
+    checkboxes.forEach(cb => {
+        if (cb.checked) {
+            const itemId = parseInt(cb.dataset.id);
+            const item = cart.find(i => i.id === itemId);
+            total += item.price * item.quantity;
+        }
+    });
+
+    const totalEl = document.getElementById("cart-total");
+    totalEl.innerHTML = `Selected Total: &#8377; ${total}`;
 }
