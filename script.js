@@ -223,3 +223,28 @@ function loadCartPage() {
     totalEl.innerHTML = `Grand Total: &#8377; ${grandTotal}`;
 }
 document.addEventListener("DOMContentLoaded", loadCartPage);
+function buyFromCart() {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        alert("Please login first to place order");
+        window.location.href = "login.html";
+        return;
+    }
+
+    if (cart.length === 0) {
+        alert("Your cart is empty");
+        return;
+    }
+
+    // Simple order placement (demo purpose)
+    alert("Order placed successfully!");
+
+    // Clear cart
+    cart = [];
+    localStorage.removeItem("cart");
+    updateCartCount();
+
+    // Redirect to home
+    window.location.href = "index.html";
+}

@@ -199,3 +199,15 @@ button:hover {
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
+.buy-cart-btn {
+    margin: 30px 40px;
+    padding: 14px 30px;
+    font-size: 1.1rem;
+    background: #2e7d32;
+    color: white;
+    border-radius: 8px;
+}
+
+.buy-cart-btn:hover {
+    background: #1b5e20;
+}
