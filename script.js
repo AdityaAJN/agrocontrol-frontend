@@ -187,3 +187,39 @@ function updateCartCount() {
     countEl.textContent = totalItems;
 }
 updateCartCount();
+function loadCartPage() {
+    const cartContainer = document.getElementById("cart-items");
+    const totalEl = document.getElementById("cart-total");
+
+    if (!cartContainer) return;
+
+    cartContainer.innerHTML = "";
+    let grandTotal = 0;
+
+    if (cart.length === 0) {
+        cartContainer.innerHTML = "<p>Your cart is empty.</p>";
+        totalEl.textContent = "";
+        return;
+    }
+
+    cart.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        grandTotal += itemTotal;
+
+        const div = document.createElement("div");
+        div.className = "cart-item";
+
+        div.innerHTML = `
+            <h3>${item.name}</h3>
+            <p>Price: &#8377; ${item.price} / kg</p>
+            <p>Quantity: ${item.quantity} kg</p>
+            <p><strong>Total: &#8377; ${itemTotal}</strong></p>
+            <hr>
+        `;
+
+        cartContainer.appendChild(div);
+    });
+
+    totalEl.innerHTML = `Grand Total: &#8377; ${grandTotal}`;
+}
+document.addEventListener("DOMContentLoaded", loadCartPage);
