@@ -86,14 +86,18 @@ function login() {
 }
 
 function register() {
-    const name = document.getElementById("name").value;
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
+    const role = document.getElementById("role").value;
 
     fetch(`${API_BASE}/api/register/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password })
+        body: JSON.stringify({
+            email: email,
+            password: password,
+            role: role
+        })
     })
     .then(res => res.json())
     .then(() => {
@@ -101,6 +105,7 @@ function register() {
         window.location.href = "login.html";
     });
 }
+
 function buyCrop(cropId) {
     const token = localStorage.getItem("token");
 

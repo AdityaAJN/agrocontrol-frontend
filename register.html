@@ -8,13 +8,19 @@
 
 <div class="form-container">
     <h2>Register</h2>
-    <input type="text" id="name" placeholder="Full Name">
-<input type="email" id="email" placeholder="Email">
-<input type="password" id="password" placeholder="Password">
-<button onclick="register()">Register</button>
 
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Password" required>
+
+    <!-- ROLE SELECTION (THIS WAS MISSING) -->
+    <select id="role">
+        <option value="buyer">Buyer</option>
+        <option value="farmer">Farmer</option>
+    </select>
+
+    <button onclick="register()">Register</button>
 </div>
-<script src="script.js"></script>
 
+<script src="script.js"></script>
 </body>
 </html>
