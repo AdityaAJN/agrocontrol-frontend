@@ -1,4 +1,5 @@
 const API_BASE = "https://agrocontrol-backend-ofyy.onrender.com";
+let allCrops = [];
 
 
 
@@ -7,49 +8,54 @@ const cropContainer = document.getElementById("crop-list");
 
 if (cropContainer) {
     fetch(`${API_BASE}/api/crops/`)
-        .then(response => response.json())
-        .then(data => {
-            data.forEach(crop => {
-                const card = document.createElement("div");
-                card.className = "crop-card";
-               card.innerHTML = `
-    <img src="${API_BASE}${crop.image}" alt="${crop.name}" class="crop-image">
+    .then(response => response.json())
+    .then(data => {
+        allCrops = data;
+        renderCrops(allCrops);
+    });
+function renderCrops(crops) {
+    const container = document.getElementById("crop-list");
+    container.innerHTML = "";
 
-    <h3>${crop.name}</h3>
+    crops.forEach(crop => {
+        const card = document.createElement("div");
+        card.className = "crop-card";
 
-   
-   <p class="price">
-    &#8377; ${crop.price} / kg
-</p>
+        card.innerHTML = `
+            <img src="${API_BASE}${crop.image}" alt="${crop.name}" class="crop-image">
 
-<label>
-    Quantity (kg):
-    <input 
-        type="number"
-        min="1"
-        value="1"
-        class="qty-input"
-        id="qty-${crop.id}"
-        oninput="updateTotal(${crop.id}, ${crop.price})"
-    >
-</label>
+            <h3>${crop.name}</h3>
 
-<p class="total-price" id="total-${crop.id}">
-    Total: &#8377; ${crop.price}
-</p>
+            <p class="price">
+                &#8377; ${crop.price} / kg
+            </p>
 
-<p>${crop.description}</p>
+            <label>
+                Quantity (kg):
+                <input
+                    type="number"
+                    min="1"
+                    value="1"
+                    class="qty-input"
+                    id="qty-${crop.id}"
+                    oninput="updateTotal(${crop.id}, ${crop.price})"
+                >
+            </label>
 
+            <p class="total-price" id="total-${crop.id}">
+                Total: &#8377; ${crop.price}
+            </p>
 
-    <button onclick="buyCrop(${crop.id})">
-        Buy
-    </button>
-`;
+            <p>${crop.description}</p>
 
-                cropContainer.appendChild(card);
-            });
-        });
+            <button onclick="buyCrop(${crop.id})">Buy</button>
+        `;
+
+        container.appendChild(card);
+    });
 }
+}
+
 
 
 
@@ -136,3 +142,12 @@ function updateTotal(cropId, pricePerKg) {
     totalEl.innerHTML = `Total: &#8377; ${total}`;
 }
 
+function searchCrops() {
+    const input = document.getElementById("search-input").value.toLowerCase();
+
+    const filtered = allCrops.filter(crop =>
+        crop.name.toLowerCase().includes(input)
+    );
+
+    renderCrops(filtered);
+}
