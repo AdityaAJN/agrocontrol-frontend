@@ -62,9 +62,9 @@ function renderCrops(crops) {
 
 
 
-
 function login() {
     alert("login button clicked");
+
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
@@ -75,15 +75,30 @@ function login() {
     })
     .then(res => res.json())
     .then(data => {
+        console.log("LOGIN RESPONSE:", data); // 🔍 DEBUG
+
         if (data.token) {
             localStorage.setItem("token", data.token);
+            localStorage.setItem("role", data.role);
+
             alert("Login successful");
-            window.location.href = "index.html";
+
+            // ✅ ROLE-BASED REDIRECT (THIS IS THE KEY PART)
+            if (data.role === "farmer") {
+                window.location.href = "farmer-dashboard.html";
+            } else {
+                window.location.href = "crops.html";
+            }
         } else {
             alert("Login failed");
         }
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Server error");
     });
 }
+
 
 function register() {
     const email = document.getElementById("email").value;
@@ -289,4 +304,35 @@ function updateSelectedTotal() {
 
     const totalEl = document.getElementById("cart-total");
     totalEl.innerHTML = `Selected Total: &#8377; ${total}`;
+}
+function addCrop() {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        alert("Please login as farmer");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("name", document.getElementById("crop-name").value);
+    formData.append("price", document.getElementById("crop-price").value);
+    formData.append("description", document.getElementById("crop-description").value);
+    formData.append("image", document.getElementById("crop-image").files[0]);
+
+    fetch(`${API_BASE}/api/add-crop/`, {
+        method: "POST",
+        headers: {
+            "Authorization": "Bearer " + token
+        },
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert("Crop added successfully");
+        document.getElementById("crop-name").value = "";
+        document.getElementById("crop-price").value = "";
+        document.getElementById("crop-description").value = "";
+        document.getElementById("crop-image").value = "";
+    })
+    .catch(() => alert("Error adding crop"));
 }

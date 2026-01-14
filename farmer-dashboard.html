@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Farmer Dashboard - AgroControl</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="navbar">
+    <h1>🌾 Farmer Dashboard</h1>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="#" onclick="logout()">Logout</a>
+    </nav>
+</header>
+
+<main style="margin-top: 100px;">
+    <h2>Sell Your Crop</h2>
+
+    <input type="text" id="crop-name" placeholder="Crop Name" required>
+    <input type="number" id="crop-price" placeholder="Price per kg" required>
+    <textarea id="crop-description" placeholder="Crop Description"></textarea>
+    <input type="file" id="crop-image">
+
+    <button onclick="addCrop()">Add Crop</button>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
